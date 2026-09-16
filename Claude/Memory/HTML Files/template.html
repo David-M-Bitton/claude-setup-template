@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- always no-index / no-follow -->
+<meta name="robots" content="noindex,nofollow">
+<meta name="googlebot" content="noindex,nofollow">
+<!-- SEO <title> matches the on-page hero title and is descriptive. CHANGE THIS. -->
+<title>Report Template — replace with descriptive title</title>
+<!-- system-ui font stack — no web font / Google Fonts link needed -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ============ Palette (neutral default — swap freely, no fixed brand here) ============ */
+:root{
+  --brand-blue:#2563eb; --brand-navy:#1e293b; --brand-accent:#0ea5e9; --brand-pink:#db2777;
+  --brand-lblue:#dbeafe; --brand-cloud:#f1f5f9;
+  /* light theme surfaces */
+  --bg-page:#f4f6fb; --bg-section:#ffffff; --bg-card:#f8f9fc; --bg-hover:#eef2f9;
+  --border:#e2e8f0; --thead:#eff3f9;
+  --text-primary:#1e293b; --text-secondary:#46506b; --text-muted:#6b7488;
+  --up:#15803d; --down:#b91c1c;
+  --warn-bg:#fff7e6; --warn-bd:#f5c97a; --warn-tx:#854f0b;
+  --danger-bg:#fcebeb; --danger-bd:#e9a3a3; --danger-tx:#a32d2d;
+  --shadow:0 6px 24px rgba(30,41,59,.10);
+}
+body.dark-mode{
+  --bg-page:#0d1117; --bg-section:#161b22; --bg-card:#1c2433; --bg-hover:#1e2d40;
+  --border:#30373f; --thead:#1c2433;
+  --text-primary:#e6edf3; --text-secondary:#aab4c4; --text-muted:#8b949e;
+  --up:#3fb950; --down:#f06f6f;
+  --warn-bg:#2a2310; --warn-bd:#6b5316; --warn-tx:#f0c674;
+  --danger-bg:#2a1414; --danger-bd:#6b2020; --danger-tx:#f09595;
+  --shadow:0 6px 24px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg-page);color:var(--text-primary);
+  margin:0;line-height:1.6;transition:background .25s,color .25s}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 24px 80px}
+h1,h2,h3{font-weight:600;margin:0}
+a{color:var(--brand-blue)}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text-muted)}
+
+/* ============ sticky hero header ============ */
+.hero{position:sticky;top:0;z-index:1000;background:linear-gradient(135deg,#1e293b 0%,#334155 100%);
+  color:#fff;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.hero-inner{max-width:1180px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:16px}
+.hero-text{flex:1;min-width:0}
+.hero-text h1{font-size:18px;font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
+.hero-kicker{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--brand-lblue)}
+.hero-meta{font-size:12px;color:#c9d3f2;margin-top:2px}
+.hero-actions{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.hero-btnrow{display:flex;align-items:center;gap:8px}
+.hbtn.icon{padding:6px 9px}
+.updated{font-size:11px;color:#c9d3f2;text-align:right;white-space:nowrap}
+.hbtn{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);color:#fff;
+  border-radius:8px;padding:6px 11px;font:600 12px system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.hbtn:hover{background:rgba(255,255,255,.2)}
+/* active/pressed state for toggle buttons (print) */
+.hbtn.on{background:var(--brand-accent);border-color:var(--brand-accent)}
+/* hover tooltip on a hero button — 13px/19px/400/black per the tooltip rule */
+.hbtn[data-tip]{position:relative}
+.hbtn[data-tip]:hover::after{content:attr(data-tip);position:absolute;top:130%;right:0;z-index:1300;
+  background:#fff;color:#111;border:1px solid #d7dbe3;border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.18);
+  padding:9px 11px;width:250px;font:400 13px/19px system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  text-align:left;white-space:normal}
+
+/* hamburger jump menu */
+.menu-wrap{position:relative}
+.menu-panel{display:none;position:absolute;right:0;top:115%;z-index:1100;background:var(--bg-section);
+  border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);min-width:240px;padding:6px;max-height:70vh;overflow:auto}
+.menu-panel.open{display:block}
+.menu-panel a{display:block;padding:8px 12px;border-radius:7px;color:var(--text-primary);text-decoration:none;font-size:13px}
+.menu-panel a:hover{background:var(--bg-hover)}
+
+/* ============ urgent banner ============ */
+.banner{background:var(--danger-bg);border:1px solid var(--danger-bd);color:var(--danger-tx);
+  border-radius:10px;padding:12px 16px;margin:16px 0;font-size:14px;display:flex;gap:10px;align-items:flex-start}
+.banner.warn{background:var(--warn-bg);border-color:var(--warn-bd);color:var(--warn-tx)}
+
+/* ============ notes ============ */
+.notes{background:var(--bg-section);border:1px solid var(--border);border-radius:12px;margin:14px 0}
+.notes-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:12px 16px;user-select:none}
+.notes-head h3{font-size:14px;font-weight:600}
+#notes-editor{min-height:120px;border-top:1px solid var(--border);padding:14px 18px;font-size:14px;
+  line-height:1.7;color:var(--text-primary);outline:none}
+#notes-editor:empty:before{content:attr(data-ph);color:var(--text-muted)}
+.notes-body.collapsed{display:none}
+.save-status{font-size:11px;color:var(--up);margin-left:8px}
+
+/* ============ sections / accordions ============ */
+.section{background:var(--bg-section);border:1px solid var(--border);border-radius:12px;margin:14px 0;scroll-margin-top:84px}
+.section-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;padding:14px 18px}
+.section-head h2{font-size:17px}
+.section-body{padding:4px 18px 18px;border-top:1px solid var(--border)}
+.section-body.collapsed{display:none}
+.acc-btn{background:var(--bg-card);border:1px solid var(--border);color:var(--text-muted);
+  border-radius:14px;padding:3px 12px;font:600 11px system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;cursor:pointer}
+
+/* ============ KPI cards ============ */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:8px 0 16px}
+.kpi{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.klabel{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);font-weight:600}
+.kval{font-size:22px;font-weight:700;margin-top:3px}
+.kdelta{font-size:12px;font-weight:600;margin-top:3px}
+
+/* ============ delta arrows ============ */
+.delta{font-weight:600;font-variant-numeric:tabular-nums}
+.delta.up{color:var(--up)} .delta.up::before{content:"\25B2 "}
+.delta.down{color:var(--down)} .delta.down::before{content:"\25BC "}
+.delta.flat{color:var(--text-muted)}
+
+/* ============ chips / tags / pills ============ */
+.chip{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;
+  background:var(--brand-lblue);color:#0c447c;margin:2px}
+body.dark-mode .chip{background:#13335c;color:#cfe2ff}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:5px;background:var(--bg-hover);color:var(--text-secondary)}
+
+/* ============ tables: sticky header + sortable ============ */
+.tablewrap{overflow:auto;max-height:560px;border:1px solid var(--border);border-radius:10px;margin:8px 0}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+thead th{position:sticky;top:0;background:var(--thead);z-index:2;font-size:11px;text-transform:uppercase;
+  letter-spacing:.04em;color:var(--text-muted);font-weight:600;cursor:pointer;white-space:nowrap}
+thead th[data-nosort]{cursor:default}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr:hover td{background:var(--bg-hover)}
+th .caret{opacity:.35;font-size:10px;margin-left:4px}
+th[aria-sort="ascending"] .caret::after{content:"\25B2";opacity:1}
+th[aria-sort="descending"] .caret::after{content:"\25BC";opacity:1}
+th[aria-sort="none"] .caret::after,th:not([aria-sort]) .caret::after{content:"\2195"}
+
+/* ============ tooltips: 13px / 19px / 400 / black, always-light popover ============ */
+.tip{position:relative;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;
+  border-radius:50%;border:1px solid var(--text-muted);color:var(--text-muted);font:700 10px Georgia,serif;
+  font-style:italic;cursor:help;margin-left:6px;vertical-align:middle;user-select:none}
+.tip:hover,.tip:focus{background:var(--brand-blue);border-color:var(--brand-blue);color:#fff;outline:none}
+.tip .tipbox{display:none;position:absolute;z-index:1200;top:150%;left:0;width:340px;max-width:80vw;
+  background:#ffffff;border:1px solid #d7dbe3;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.18);padding:11px 13px}
+.tip.tip-r .tipbox{left:auto;right:0}
+.tip:hover .tipbox,.tip:focus .tipbox{display:block}
+.tip .tipbox,.tip .tipbox *{font-size:13px!important;line-height:19px!important;font-weight:400!important;
+  font-style:normal!important;color:#111111!important;text-align:left}
+
+/* ============ checkbox action items ============ */
+.todo{display:flex;align-items:flex-start;gap:9px;padding:6px 0;font-size:14px;cursor:pointer}
+.todo input{margin-top:3px;width:16px;height:16px;accent-color:var(--brand-blue);flex-shrink:0}
+.todo input:checked + span{color:var(--text-muted);text-decoration:line-through}
+
+ul,ol{margin:8px 0;padding-left:22px} li{margin:4px 0}
+.chart-box{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px;margin:10px 0}
+.chart-key{display:flex;justify-content:center;flex-wrap:wrap;gap:20px;margin-top:12px;font-size:13px;color:var(--text-secondary)}
+.key-item{display:inline-flex;align-items:center;gap:7px}
+.swatch{width:13px;height:13px;border-radius:3px;display:inline-block}
+.footer{color:var(--text-muted);font-size:12px;margin-top:40px;border-top:1px solid var(--border);padding-top:14px}
+@media(max-width:640px){.hero-text h1{white-space:normal}.updated{display:none}}
+
+/* ============ PRINT-FRIENDLY (rule 20) ============
+   Two layers, both required:
+   1. body.print-mode — the on-screen TOGGLE (printer icon, off by default, saved to localStorage)
+   2. @media print   — the real printout, correct even if the toggle was never switched on
+   Both exist because a scroll-boxed table (max-height + overflow:auto) otherwise prints ONLY the
+   visible rows and silently cuts the rest off. */
+body.print-mode .tablewrap{max-height:none!important;overflow:visible!important}
+body.print-mode .section-body{display:block!important}
+body.print-mode .hero{position:static}
+@media print{
+  .hero-actions,.menu-wrap,.notes,.hbtn{display:none!important}
+  .hero{position:static!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .tablewrap{max-height:none!important;overflow:visible!important;border:1px solid #ccc}
+  .section-body{display:block!important}          /* collapsed accordions still print */
+  .section{break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+  thead th{position:static!important}             /* sticky headers repeat/overlap when printed */
+  body{background:#fff!important;color:#000!important}
+  a[href]:after{content:""}                       /* don't append raw URLs after links */
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== STICKY HERO HEADER ===================== -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <!-- optional small eyebrow above the title (e.g. "Weekly report") -->
+      <div class="hero-kicker">Report</div>
+      <h1 id="hero-title">Report title goes here — keep it descriptive</h1>
+      <div class="hero-meta">Short one-line context · owner · scope</div>
+    </div>
+    <div class="hero-actions">
+      <div class="hero-btnrow">
+        <button class="hbtn icon" onclick="toggleTheme()" aria-label="Dark/Light Mode" title="Dark/Light Mode"><span id="theme-icon">&#9790;</span></button>
+        <button class="hbtn icon" id="toggle-all" onclick="toggleAllSections()" aria-label="Expand/Collapse All Sections" title="Expand/Collapse All Sections"><span id="expand-icon">&#8863;</span></button>
+        <!-- print-friendly toggle (rule 20). Off by default, persisted, tooltip explains what it does. -->
+        <button class="hbtn icon" id="print-btn" onclick="togglePrint()" aria-label="Print-friendly layout" aria-pressed="false"
+          data-tip="Print-friendly mode: opens every section and un-scrolls all tables so nothing gets cut off when you print or save as PDF.">&#128424;</button>
+        <div class="menu-wrap">
+          <button class="hbtn icon" onclick="toggleMenu(event)" aria-label="Table of Contents" title="Table of Contents">&#9776;</button>
+          <nav class="menu-panel" id="menu-panel"></nav>
+        </div>
+      </div>
+      <!-- Build scripts: replace "—" with the real generation time, e.g. "Thursday, June 18, 2026 at 8:45 AM EDT". If left as "—", it auto-stamps to the open time. -->
+      <div class="updated" id="last-updated">Last Updated: —</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ urgent flags at the very top (remove if none) ============ -->
+  <div class="banner"><span>&#9888;</span><div><strong>Urgent:</strong> put any major/urgent flag here so it is the first thing seen. Delete this block when nothing is urgent.</div></div>
+
+  <!-- ============ notes (collapsed by default, saved to localStorage) ============ -->
+  <div class="notes">
+    <div class="notes-head" onclick="toggleNotes()">
+      <h3>&#128221; My notes <span class="save-status" id="notes-status"></span></h3>
+      <button class="acc-btn" id="notes-btn" aria-label="Toggle notes">&#9660;</button>
+    </div>
+    <div class="notes-body collapsed" id="notes-body">
+      <div id="notes-editor" contenteditable="true" data-ph="Type your notes here… (saved on this device)" oninput="saveNotes()"></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTIONS (accordions, open by default). Copy this block per section. ============ -->
+  <section class="section" id="sec-summary" data-title="Executive summary">
+    <div class="section-head" onclick="toggleSection('sec-summary')">
+      <div><h2>Executive summary</h2></div>
+      <button class="acc-btn" aria-label="Toggle section">&#9650;</button>
+    </div>
+    <div class="section-body">
+      <div class="kpis">
+        <div class="kpi"><div class="klabel">Metric A</div><div class="kval">1,785</div><div class="kdelta"><span class="delta up">6.0%</span> vs prior</div></div>
+        <div class="kpi"><div class="klabel">Metric B</div><div class="kval">1,231</div><div class="kdelta"><span class="delta down">5.1%</span> vs prior</div></div>
+        <div class="kpi"><div class="klabel">Metric C</div><div class="kval">$48.2k</div><div class="kdelta"><span class="delta flat">0.0%</span> flat</div></div>
+      </div>
+      <p><strong>Bold the most important takeaway.</strong> Keep prose tight; push detail to the Appendix. <span class="chip">tag</span> <span class="tag">label</span>
+      <span class="tip" tabindex="0">i<span class="tipbox">Tooltip copy: 13px, 19px line-height, weight 400, black text on a light popover so it stays readable in dark mode.</span></span></p>
+      <ul><li>Use bullets / numbered lists for scannability.</li><li>Charts where possible.</li></ul>
+    </div>
+  </section>
+
+  <section class="section" id="sec-trend" data-title="Trend">
+    <div class="section-head" onclick="toggleSection('sec-trend')">
+      <div><h2>Trend</h2></div>
+      <button class="acc-btn" aria-label="Toggle section">&#9650;</button>
+    </div>
+    <div class="section-body">
+      <div class="chart-box">
+        <canvas id="demo-chart" height="110"></canvas>
+        <div class="chart-key">
+          <span class="key-item"><span class="swatch" style="background:#2563eb"></span>Metric A</span>
+          <span class="key-item"><span class="swatch" style="background:#db2777"></span>Metric B</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="sec-table" data-title="Data table">
+    <div class="section-head" onclick="toggleSection('sec-table')">
+      <div><h2>Data table (sortable, sticky header)</h2></div>
+      <button class="acc-btn" aria-label="Toggle section">&#9650;</button>
+    </div>
+    <div class="section-body">
+      <div class="tablewrap">
+        <table class="sortable">
+          <thead><tr>
+            <th>Month <span class="caret"></span></th>
+            <th class="num">Metric A <span class="caret"></span></th>
+            <th class="num">Metric B <span class="caret"></span></th>
+            <th data-nosort>Notes</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>2026-03</td><td class="num">1937</td><td class="num">1282</td><td>—</td></tr>
+            <tr><td>2026-04</td><td class="num">1684</td><td class="num">1191</td><td>low</td></tr>
+            <tr><td>2026-05</td><td class="num">1785</td><td class="num">1231</td><td>rebound</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="sec-actions" data-title="Action items">
+    <div class="section-head" onclick="toggleSection('sec-actions')">
+      <div><h2>Action items</h2></div>
+      <button class="acc-btn" aria-label="Toggle section">&#9650;</button>
+    </div>
+    <div class="section-body">
+      <!-- checkboxes saved to localStorage. Give each a unique data-todo key. -->
+      <label class="todo"><input type="checkbox" data-todo="act-1"><span>First action item — checked state is remembered on this device.</span></label>
+      <label class="todo"><input type="checkbox" data-todo="act-2"><span>Second action item.</span></label>
+    </div>
+  </section>
+
+  <!-- ============ Appendix at the very bottom, collapsed by default ============ -->
+  <section class="section" id="sec-appendix" data-title="Appendix" data-keep-collapsed>
+    <div class="section-head" onclick="toggleSection('sec-appendix')">
+      <div><h2>Appendix</h2></div>
+      <button class="acc-btn" aria-label="Toggle section">&#9660;</button>
+    </div>
+    <div class="section-body collapsed">
+      <p>Secondary detail, methodology, raw figures, sources. Keep the main report clean; put the heavy stuff here.</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ============ keys ============ */
+var REPORT_KEY = 'report-TEMPLATE';   /* CHANGE per report so notes/checkboxes/accordion don't collide */
+var THEME_KEY  = 'html-report-theme';           /* shared across all reports using this template */
+
+/* ============ theme (persisted) ============ */
+function applyTheme(mode){
+  var dark = mode==='dark';
+  document.body.classList.toggle('dark-mode', dark);
+  document.getElementById('theme-icon').innerHTML = dark ? '&#9728;' : '&#9790;';
+  localStorage.setItem(THEME_KEY, dark?'dark':'light');
+  if(window.__charts) window.__charts.forEach(reskinChart);
+}
+function toggleTheme(){ applyTheme(document.body.classList.contains('dark-mode')?'light':'dark'); }
+(function(){ applyTheme(localStorage.getItem(THEME_KEY)==='dark'?'dark':'light'); })();
+
+/* ============ Last Updated (auto-stamps when the file is opened) ============ */
+(function(){
+  var el=document.getElementById('last-updated');
+  if(!/—\s*$/.test(el.textContent)) return;   /* a real build-time stamp is present — keep it */
+  var d=new Date();
+  var s=d.toLocaleString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric',
+    hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+  el.textContent='Last Updated: '+s;
+})();
+
+/* ============ accordions + expand/collapse all ============ */
+function _accBtn(sec){ return sec.querySelector('.acc-btn'); }
+function setSection(id, open){
+  var sec=document.getElementById(id); if(!sec) return;
+  var body=sec.querySelector('.section-body'); var btn=_accBtn(sec);
+  body.classList.toggle('collapsed', !open);
+  if(btn) btn.innerHTML = open?'&#9650;':'&#9660;';   /* up = open (click to collapse), down = collapsed */
+}
+function toggleSection(id){
+  var sec=document.getElementById(id);
+  var collapsed=sec.querySelector('.section-body').classList.contains('collapsed');
+  setSection(id, collapsed); saveAccordion();
+}
+function toggleAllSections(){
+  var btn=document.getElementById('toggle-all');
+  var collapseNow = btn.getAttribute('data-state')!=='collapsed';  /* default first click collapses */
+  document.querySelectorAll('.section').forEach(function(sec){ setSection(sec.id, !collapseNow); });
+  document.getElementById('expand-icon').innerHTML = collapseNow?'&#8862;':'&#8863;';   /* show + when collapsed */
+  btn.setAttribute('data-state', collapseNow?'collapsed':'expanded');
+  btn.setAttribute('aria-label', collapseNow?'Expand all sections':'Collapse all sections');
+  saveAccordion();
+}
+function saveAccordion(){
+  var st={}; document.querySelectorAll('.section').forEach(function(s){
+    st[s.id]=!s.querySelector('.section-body').classList.contains('collapsed'); });
+  localStorage.setItem(REPORT_KEY+':acc', JSON.stringify(st));
+}
+(function(){ try{ var st=JSON.parse(localStorage.getItem(REPORT_KEY+':acc')||'null');
+  if(st) Object.keys(st).forEach(function(id){ if(document.getElementById(id)) setSection(id, st[id]); });
+}catch(e){}
+  /* sections marked data-keep-collapsed (e.g. Appendix) always load collapsed, ignoring saved state */
+  document.querySelectorAll('.section[data-keep-collapsed]').forEach(function(s){ setSection(s.id,false); });
+  applyPrint(localStorage.getItem(REPORT_KEY+':print')==='1');   /* restore print toggle, OFF by default */
+})();
+
+/* ============ print-friendly toggle (rule 20) — off by default, persisted ============ */
+function applyPrint(on){
+  document.body.classList.toggle('print-mode', on);
+  var b=document.getElementById('print-btn'); if(!b) return;
+  b.classList.toggle('on', on);
+  b.setAttribute('aria-pressed', on?'true':'false');
+  localStorage.setItem(REPORT_KEY+':print', on?'1':'0');
+  /* print layout is useless with sections collapsed, so opening them is part of turning it on */
+  if(on) document.querySelectorAll('.section').forEach(function(s){ setSection(s.id,true); });
+}
+function togglePrint(){ applyPrint(!document.body.classList.contains('print-mode')); }
+
+/* ============ hamburger jump menu (auto-built from sections) ============ */
+(function(){
+  var panel=document.getElementById('menu-panel');
+  document.querySelectorAll('.section').forEach(function(sec){
+    var a=document.createElement('a'); a.textContent=sec.getAttribute('data-title')||sec.id;
+    a.href='#'+sec.id;
+    a.onclick=function(e){ e.preventDefault(); setSection(sec.id,true);
+      sec.scrollIntoView({behavior:'smooth'}); panel.classList.remove('open'); };
+    panel.appendChild(a);
+  });
+})();
+function toggleMenu(e){ e.stopPropagation(); document.getElementById('menu-panel').classList.toggle('open'); }
+document.addEventListener('click', function(){ document.getElementById('menu-panel').classList.remove('open'); });
+
+/* ============ notes (collapsed by default, localStorage autosave) ============ */
+function toggleNotes(){
+  var b=document.getElementById('notes-body'), btn=document.getElementById('notes-btn');
+  b.classList.toggle('collapsed'); btn.innerHTML = b.classList.contains('collapsed')?'&#9660;':'&#9650;';
+}
+var _noteTimer;
+function saveNotes(){
+  clearTimeout(_noteTimer);
+  _noteTimer=setTimeout(function(){
+    localStorage.setItem(REPORT_KEY+':notes', document.getElementById('notes-editor').innerHTML);
+    var s=document.getElementById('notes-status'); s.textContent='Saved ✓';
+    setTimeout(function(){s.textContent='';},1500);
+  },700);
+}
+(function(){ var v=localStorage.getItem(REPORT_KEY+':notes'); if(v) document.getElementById('notes-editor').innerHTML=v; })();
+
+/* ============ action-item checkboxes (localStorage) ============ */
+document.querySelectorAll('input[type=checkbox][data-todo]').forEach(function(cb){
+  var k=REPORT_KEY+':todo:'+cb.getAttribute('data-todo');
+  cb.checked = localStorage.getItem(k)==='1';
+  cb.addEventListener('change', function(){ localStorage.setItem(k, cb.checked?'1':'0'); });
+});
+
+/* ============ click-to-sort tables ============ */
+document.querySelectorAll('table.sortable').forEach(function(tbl){
+  var ths=tbl.querySelectorAll('thead th');
+  ths.forEach(function(th,idx){
+    if(th.hasAttribute('data-nosort')) return;
+    th.setAttribute('aria-sort','none');
+    th.addEventListener('click', function(){
+      var asc = th.getAttribute('aria-sort')!=='ascending';
+      ths.forEach(function(o){ if(!o.hasAttribute('data-nosort')) o.setAttribute('aria-sort','none'); });
+      th.setAttribute('aria-sort', asc?'ascending':'descending');
+      var tb=tbl.querySelector('tbody');
+      var rows=Array.from(tb.querySelectorAll('tr'));
+      rows.sort(function(a,b){
+        var x=a.children[idx].textContent.trim(), y=b.children[idx].textContent.trim();
+        var nx=parseFloat(x.replace(/[^0-9.\-]/g,'')), ny=parseFloat(y.replace(/[^0-9.\-]/g,''));
+        var both=!isNaN(nx)&&!isNaN(ny);
+        var c = both ? nx-ny : x.localeCompare(y);
+        return asc?c:-c;
+      });
+      rows.forEach(function(r){ tb.appendChild(r); });
+    });
+  });
+});
+
+/* ============ charts (theme-aware) ============ */
+window.__charts=[];
+function reskinChart(ch){
+  var dark=document.body.classList.contains('dark-mode');
+  var grid=dark?'rgba(255,255,255,.1)':'rgba(30,41,59,.08)';
+  var tx=dark?'#aab4c4':'#46506b';
+  ch.options.scales.x.grid.color=grid; ch.options.scales.y.grid.color=grid;
+  ch.options.scales.x.ticks.color=tx; ch.options.scales.y.ticks.color=tx;
+  ch.update();   /* legend hidden — the custom .chart-key adapts via CSS vars */
+}
+(function(){
+  var el=document.getElementById('demo-chart'); if(!el||!window.Chart) return;
+  var ch=new Chart(el,{type:'line',
+    data:{labels:['Mar','Apr','May'],datasets:[
+      {label:'Metric A',data:[1937,1684,1785],borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.08)',fill:true,tension:.3,borderWidth:3},
+      {label:'Metric B',data:[1282,1191,1231],borderColor:'#db2777',backgroundColor:'rgba(219,39,119,.06)',fill:true,tension:.3,borderWidth:3}]},
+    options:{responsive:true,plugins:{legend:{display:false}},
+      scales:{x:{grid:{},ticks:{font:{family:'system-ui'}}},y:{beginAtZero:true,grid:{},ticks:{font:{family:'system-ui'}}}}}});
+  window.__charts.push(ch); reskinChart(ch);
+})();
+</script>
+</body>
+</html>

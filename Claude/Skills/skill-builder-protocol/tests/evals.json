@@ -1,0 +1,523 @@
+[
+  {
+    "id": "trigger-001",
+    "category": "trigger-positive",
+    "prompt": "Let's build a skill for triaging my Slack notifications.",
+    "expected_trigger": true,
+    "notes": "Classic 'build a skill for X' pattern — must trigger",
+    "assertions": [
+      "Skill is invoked before any SKILL.md content is written",
+      "Phase 1 brainstorm is conducted before implementation begins",
+      "Claude asks at least 3 brainstorm questions or proposes 3+ design options"
+    ]
+  },
+  {
+    "id": "trigger-002",
+    "category": "trigger-positive",
+    "prompt": "Update my gmail-inbox-triage skill to also handle calendar invites.",
+    "expected_trigger": true,
+    "notes": "Explicit skill update request — must trigger",
+    "assertions": [
+      "Phase 1 brainstorm is run even for an update (not just new builds)",
+      "SKILL.md is updated to reflect the new requirement",
+      "A test case for the calendar invite behavior is added"
+    ]
+  },
+  {
+    "id": "trigger-003",
+    "category": "trigger-positive",
+    "prompt": "Turn the workflow we just did into a reusable skill.",
+    "expected_trigger": true,
+    "notes": "'Turn this into a skill' from session context — must trigger",
+    "assertions": [
+      "Claude extracts the workflow from conversation history",
+      "Phase 1 brainstorm is run before writing SKILL.md",
+      "Resulting skill includes tests"
+    ]
+  },
+  {
+    "id": "trigger-004",
+    "category": "trigger-positive",
+    "prompt": "The seo-audit skill is broken — it's not finding the right pages. Fix it.",
+    "expected_trigger": true,
+    "notes": "Fix request on an existing skill — must trigger",
+    "assertions": [
+      "Phase 3 learning capture is applied — failure is documented in Troubleshooting",
+      "SKILL.md is updated after the fix",
+      "A regression test is added for the fixed behavior"
+    ]
+  },
+  {
+    "id": "trigger-005",
+    "category": "trigger-positive",
+    "prompt": "I want a skill that automatically drafts Jira tickets from my notes.",
+    "expected_trigger": true,
+    "notes": "New skill request with clear domain — must trigger",
+    "assertions": [
+      "Brainstorm covers edge cases specific to Jira ticket creation",
+      "Subagents appear only where connectors.md allows them (connector calls, research, evals) — never for the skill's core process",
+      "Tests include at least one negative trigger case"
+    ]
+  },
+  {
+    "id": "trigger-006",
+    "category": "trigger-negative",
+    "prompt": "Can you read this PDF and summarize it?",
+    "expected_trigger": false,
+    "notes": "Routine task — should NOT trigger this skill",
+    "assertions": [
+      "Claude handles the PDF task directly without invoking skill-builder-protocol",
+      "No brainstorm phase is initiated"
+    ]
+  },
+  {
+    "id": "trigger-007",
+    "category": "trigger-negative",
+    "prompt": "Build me a React component for a login form.",
+    "expected_trigger": false,
+    "notes": "Component build, not a skill build — should NOT trigger",
+    "assertions": [
+      "Claude builds the React component without invoking skill-builder-protocol",
+      "No SKILL.md is created"
+    ]
+  },
+  {
+    "id": "phase-001",
+    "category": "phase-sequence",
+    "prompt": "Build a skill for analyzing Webflow page weight.",
+    "expected_trigger": true,
+    "notes": "Validates Phase 1 happens before Phase 2",
+    "assertions": [
+      "Claude conducts brainstorm BEFORE writing any SKILL.md content",
+      "Claude proposes at least 3 design considerations or improvement ideas",
+      "Claude waits for the user's input before starting implementation"
+    ]
+  },
+  {
+    "id": "phase-002",
+    "category": "phase-sequence",
+    "prompt": "While building: 'Actually, also handle images over 500KB separately.'",
+    "expected_trigger": true,
+    "notes": "Mid-session instruction change — validates Phase 5 sync",
+    "assertions": [
+      "SKILL.md is updated to reflect the new requirement before Claude moves on",
+      "A test case for the 500KB image behavior is added or noted",
+      "The frontmatter description is updated if the triggering behavior changed"
+    ]
+  },
+  {
+    "id": "phase-003",
+    "category": "learning-capture",
+    "prompt": "Simulated: Claude hits an error while executing a bash command during skill build.",
+    "expected_trigger": true,
+    "notes": "Validates Phase 3 — failures must be documented",
+    "assertions": [
+      "A Troubleshooting section is added to SKILL.md",
+      "The entry includes: symptom, root cause, fix, and gotchas",
+      "The fix is reflected in the skill instructions so future runs succeed"
+    ]
+  },
+  {
+    "id": "phase-004",
+    "category": "finish-review",
+    "prompt": "We're done building. What's the summary?",
+    "expected_trigger": true,
+    "notes": "Validates Phase 6 review format",
+    "assertions": [
+      "Summary includes: what was built, brainstorm ideas used, tests added, lessons captured",
+      "Summary reports the Phase 4b functional eval result and the Phase 4c prune result (lines before -> after)",
+      "Claude asks about an optimization pass before making any efficiency changes"
+    ]
+  },
+  {
+    "id": "phase-005",
+    "category": "skill-creator-integration",
+    "prompt": "We're done building. What's the summary?",
+    "expected_trigger": true,
+    "notes": "Validates that skill-creator was actually loaded and used during the build session",
+    "assertions": [
+      "The Phase 6 build summary explicitly confirms skill-creator was consulted",
+      "At least one structural or eval convention from skill-creator is visible in the output (e.g. YAML frontmatter, evals.json schema, packaging reference)",
+      "Claude does not complete a skill build without having read skill-creator's SKILL.md"
+    ]
+  },
+  {
+    "id": "quality-001",
+    "category": "artifact-quality",
+    "prompt": "Build a skill for converting Notion exports to clean Markdown.",
+    "expected_trigger": true,
+    "notes": "Validates the description-authoring rubric from references/skill-quality.md is applied to the produced skill",
+    "assertions": [
+      "The produced skill's frontmatter description leads with the capability (what it does) in the first sentence",
+      "The description contains an explicit 'Use when [triggers]' clause naming concrete keywords, contexts, or file types",
+      "The description is third person, is <=1024 characters, and contains no personal names"
+    ]
+  },
+  {
+    "id": "platform-001",
+    "category": "platform-gate",
+    "prompt": "Build a skill for cleaning up my meeting notes.",
+    "expected_trigger": true,
+    "notes": "New-skill request — must ask which platform before building",
+    "assertions": [
+      "Claude asks whether the user wants a Cowork-installed skill or a Claude Code skill BEFORE any build work",
+      "The two options are described distinctly (packaged/installed vs plain files, easier to edit)",
+      "Claude does not start writing SKILL.md until the platform choice is made"
+    ]
+  },
+  {
+    "id": "platform-002",
+    "category": "platform-gate",
+    "prompt": "New skill for tagging expenses — make it a Claude Code skill, not installed.",
+    "expected_trigger": true,
+    "notes": "Explicit Claude Code choice — validates references/claude-code-skill.md branch",
+    "assertions": [
+      "Claude creates the folder under a 'Skills' base directory using a lowercase, dash-separated slug",
+      "The project folder is stamped from the skill's bundled assets/claude-code-template (CLAUDE.md, MEMORY.md, .gitignore) — not from the user having a 0-template folder",
+      "The actual skill (SKILL.md, CHANGELOG.md) is built inside the inner skill/ folder, not the project root",
+      "CLAUDE.md and MEMORY.md placeholders ({Skill Name}, {skill-name}, {skill purpose}, date) are all filled in",
+      "A ~/.claude/commands/<slug>.md slash command is written via the Write tool, pointing at the inner skill/ folder",
+      "No .skill file is produced for this path"
+    ]
+  },
+  {
+    "id": "platform-003",
+    "category": "platform-gate",
+    "prompt": "New skill for drafting LinkedIn posts — install it in the desktop app like usual.",
+    "expected_trigger": true,
+    "notes": "Explicit Cowork-installed choice — regression: normal packaged flow still runs",
+    "assertions": [
+      "Claude follows the normal new-skill.md + packaging.md flow",
+      "The skill is packaged as a .skill file at the end and presented for install",
+      "Claude does NOT create a folder under Skills for this path"
+    ]
+  },
+  {
+    "id": "scope-001",
+    "category": "scope-gate",
+    "prompt": "Build me a skill that pulls my Stripe revenue, writes a monthly investor update, and emails it to my board.",
+    "expected_trigger": true,
+    "notes": "Three jobs in one request — validates Step 0D scope gate and the 'and' test",
+    "assertions": [
+      "Claude states the job in one '[verb] [object]' sentence and shows it needs 'and' to be accurate",
+      "Claude proposes splitting it into a chain of smaller single-job skills",
+      "Claude confirms the scope decision with the user BEFORE starting the Phase 1a interview"
+    ]
+  },
+  {
+    "id": "upgrade-001",
+    "category": "upgrade-pass",
+    "prompt": "Add a step to my slack-reply-drafter skill that checks for open threads older than 48 hours.",
+    "expected_trigger": true,
+    "notes": "Ordinary edit request — must run the upgrade pass on the existing skill, not just bolt on the step",
+    "assertions": [
+      "Claude reads the existing SKILL.md and lists its reference files before editing",
+      "Claude reports pass/fail on all 8 upgrade-pass checks (scope, invocation mode, description, size/progressive disclosure, steps-are-instructions, connectors, human-in-the-loop options, self-improvement/duplication)",
+      "Claude asks whether to apply all findings or only some, and WAITS for the answer before editing",
+      "The requested step is added along with only the approved fixes",
+      "The prune pass is run and line count before -> after is reported"
+    ]
+  },
+  {
+    "id": "upgrade-002",
+    "category": "upgrade-pass",
+    "prompt": "Review my health-tracker skill and tell me why it's so slow and bloated.",
+    "expected_trigger": true,
+    "notes": "Review-only request — findings then stop, no unrequested edits",
+    "assertions": [
+      "Claude runs the 8 upgrade-pass checks and delivers findings with a one-line fix for each",
+      "Claude does NOT edit any file before the user picks what to apply",
+      "Findings name specific line counts, duplicated rules, or connector calls rather than generic advice"
+    ]
+  },
+  {
+    "id": "quality-002",
+    "category": "artifact-quality",
+    "prompt": "Build a skill that reformats my meeting notes into action items.",
+    "expected_trigger": true,
+    "notes": "Validates the invocation-mode gate in skill-quality.md section 4",
+    "assertions": [
+      "Claude asks whether the skill should be human-triggered only or auto-invocable, with a recommendation",
+      "The produced skill sets disable-model-invocation: true unless the user chose auto-invocation for a stated reason",
+      "The frontmatter description is kept even when model invocation is disabled",
+      "The description is roughly 200-450 characters and contains no rules (rules live in the body)"
+    ]
+  },
+  {
+    "id": "quality-003",
+    "category": "artifact-quality",
+    "prompt": "Build a skill that writes LinkedIn hooks from a blog post.",
+    "expected_trigger": true,
+    "notes": "Validates 3-5 options at design choices, in the interview AND baked into the produced skill",
+    "assertions": [
+      "During the interview, every design choice (tone, structure, output format) is presented as 3-5 concrete numbered options with the recommendation as option 1, then Claude waits",
+      "Exactly 3 to 5 options are offered — not 1, and not 10",
+      "The produced skill's own steps instruct it to present 3-5 distinct numbered options and wait at each design decision point",
+      "Factual questions the user alone can answer are asked plainly with a recommendation, not padded into options"
+    ]
+  },
+  {
+    "id": "quality-004",
+    "category": "artifact-quality",
+    "prompt": "Build a skill for drafting cold outreach emails.",
+    "expected_trigger": true,
+    "notes": "Validates the embedded self-improvement rule and save-good-outputs habit",
+    "assertions": [
+      "The produced SKILL.md contains a Self-improvement section pointing at that skill's real reference files",
+      "The rule requires ASKING before making a correction permanent — never a silent skill edit",
+      "The rule covers saving user-approved outputs to references/examples/",
+      "The rule requires a version bump and CHANGELOG row for any change made this way"
+    ]
+  },
+  {
+    "id": "eval-001",
+    "category": "functional-eval",
+    "prompt": "The notion-cleaner skill is finished — is it ready?",
+    "expected_trigger": true,
+    "notes": "Validates Phase 4b functional eval is run before declaring a skill done",
+    "assertions": [
+      "Claude asks for a real test input if one was not supplied",
+      "Claude runs 3 subagents in parallel against the skill in fresh contexts",
+      "The report covers all three checks: step order, reference files loaded on demand at the right step, connector called correctly (or noted as N/A)",
+      "Any failure is turned into a specific fix and the eval is re-run rather than reported and left",
+      "Claude does not declare the skill done on trigger tests (evals.json) alone"
+    ]
+  },
+  {
+    "id": "connector-001",
+    "category": "connectors",
+    "prompt": "Build a skill that writes competitor teardowns — it needs our ICP, our positioning doc, and live SERP data for the competitor.",
+    "expected_trigger": true,
+    "notes": "Validates the connectors.md decision ladder",
+    "assertions": [
+      "Stable data (ICP, positioning) is stored as a reference file, with no connector call for it",
+      "The live SERP call is routed through a subagent that returns only the clean result",
+      "The SKILL.md step states what the subagent must return",
+      "Claude does not put the raw connector call inline in the main skill process"
+    ]
+  },
+  {
+    "id": "sync-001",
+    "category": "sync-discipline",
+    "prompt": "Change the output format in my expense-tagger skill from a table to bullets.",
+    "expected_trigger": true,
+    "notes": "Validates version + changelog discipline on every save",
+    "assertions": [
+      "The SKILL.md version line is bumped",
+      "A new dated row is added to CHANGELOG.md with a Why",
+      "The timestamp came from running the date command, not from a guess"
+    ]
+  },
+  {
+    "id": "sync-002",
+    "category": "sync-discipline",
+    "prompt": "Update this skill — its SKILL.md has a version history table embedded at the bottom.",
+    "expected_trigger": true,
+    "notes": "Validates changelog migration out of SKILL.md",
+    "assertions": [
+      "The embedded history table is moved into CHANGELOG.md",
+      "SKILL.md is left with a single version line linking to CHANGELOG.md",
+      "No history rows are lost in the move"
+    ]
+  },
+  {
+    "id": "file-manager-001",
+    "category": "file-paths",
+    "prompt": "Quick one — just review my travel-agent skill, don't change anything.",
+    "expected_trigger": true,
+    "notes": "The save-path confirmation runs even on a review-only request",
+    "assertions": [
+      "SKILL.md's 'Always: Confirm Save Paths First' section is applied before any skill file is touched",
+      "The migration scan for stale copies is run and its result stated",
+      "No file is written to a project root, a category folder, or the Skills root"
+    ]
+  },
+  {
+    "id": "upgrade-pass-connector-visibility-001",
+    "category": "upgrade-pass",
+    "prompt": "Add a step to my personal-finance skill that flags any transaction over $500 that isn't categorized yet.",
+    "expected_trigger": true,
+    "notes": "Check 6 must catch a connector that exists only in MEMORY.md. The target skill's SKILL.md never mentions Monarch, so an audit that reads SKILL.md alone scores check 6 a false pass.",
+    "assertions": [
+      "The target skill's MEMORY.md and CLAUDE.md are read, not just its SKILL.md and reference files",
+      "The skill folder is grepped for mcp__, connector names, or tool calls",
+      "Check 6 reports a specific finding that the connector is absent from SKILL.md, not a generic pass",
+      "Check 6 also reports the missing subagent routing and the stated return shape for the live call",
+      "All 8 checks produce a verdict before the requested change is drafted"
+    ]
+  },
+  {
+    "id": "interview-after-gate-001",
+    "category": "upgrade-pass",
+    "prompt": "This skill needs a big restructure — split the reference files apart and add two new phases.",
+    "expected_trigger": true,
+    "notes": "Large edit. The interview replaces superpowers:brainstorming and must run AFTER the approval gate, never before the audit.",
+    "assertions": [
+      "The Upgrade Pass runs and its findings are reported before any interview question is asked",
+      "The session stops at 'Apply all of these along with your change, or just some?' and waits",
+      "The interview runs only after the user answers, and is scoped to the new behavior rather than restarting big-picture questions",
+      "superpowers:brainstorming is not invoked or referenced",
+      "No file is written before the interview recap is confirmed"
+    ]
+  },
+  {
+    "id": "upgrade-pass-loads-check-references-001",
+    "category": "upgrade-pass",
+    "prompt": "Add a step to my personal-finance skill that flags any transaction over $500 that isn't categorized yet.",
+    "expected_trigger": true,
+    "notes": "Phase 4b eval, 2026-08-03: 3/3 runs graded the 8 checks from the edit-skill.md table alone. 2 of 3 never opened skill-quality.md or connectors.md; 0 of 3 opened prune.md or new-skill.md. The Reference column existed but nothing said to load it.",
+    "assertions": [
+      "references/edit-skill.md is loaded, and each check's Reference file is opened at that check: new-skill.md 0D for check 1, skill-quality.md for checks 2/3/4/7/8a, connectors.md for check 6, prune.md for checks 5/8b",
+      "The check reference files are NOT all loaded upfront in one batch before the audit starts",
+      "interview.md, phases.md, changelog.md, packaging.md, and claude-code-skill.md are NOT loaded during the audit",
+      "No check is scored using only the one-line summary in the Upgrade Pass table"
+    ]
+  },
+  {
+    "id": "upgrade-pass-check-7-authoring-only-001",
+    "category": "upgrade-pass",
+    "prompt": "Review my personal-finance skill.",
+    "expected_trigger": true,
+    "notes": "Phase 4b eval, 2026-08-03: runs split on check 7 because the target skill says 'give one strong recommendation, not a menu'. The 3-5 options standard governs authoring forks, not the finished skill's advice.",
+    "assertions": [
+      "Check 7 does not fail the skill for instructing its own user-facing answers to give one recommendation instead of a menu",
+      "Check 7 still fails on a missing checkpoint before a send, publish, spend, or delete",
+      "Checks 8a and 8b are reported as two separate verdicts, not one merged 'split' result"
+    ]
+  },
+  {
+    "id": "upgrade-pass-check-4-lean-skill-001",
+    "category": "upgrade-pass",
+    "prompt": "Review my personal-finance skill and tell me what's wrong with it.",
+    "expected_trigger": true,
+    "notes": "Phase 4b eval, 2026-08-03: personal-finance SKILL.md is 65 lines and one run nearly failed it for being under the ~100-200 band. 500 is a ceiling, not a target.",
+    "assertions": [
+      "Check 4 passes a SKILL.md that is well under 100 lines, provided disclosure is progressive and references are one level deep",
+      "A SKILL.md is never marked as failing check 4 for being too short"
+    ]
+  },
+  {
+    "id": "save-paths-claude-code-scope-001",
+    "category": "setup",
+    "prompt": "Fix a typo in my personal-finance skill's description.",
+    "expected_trigger": true,
+    "notes": "Phase 4b eval, 2026-08-03: 3/3 runs flagged the old ai-file-manager skill was Cowork-only with no Claude Code translation. Merged into SKILL.md 2026-08-11; the skill no longer exists and must not be invoked.",
+    "assertions": [
+      "The save-path confirmation runs before anything else, including on a read-only review",
+      "No attempt is made to invoke or read a separate ai-file-manager skill",
+      "Only the migration scan and save-path confirmation are run on the Claude Code path",
+      "request_cowork_directory, /sessions/*/mnt/ mounts, .skill packaging, and computer:// links are not attempted for a skill folder on the user's Mac"
+    ]
+  },
+  {
+    "id": "upgrade-pass-authoritative-check-list-001",
+    "category": "upgrade-pass",
+    "prompt": "Add a step to my personal-finance skill that flags any transaction over $500 that isn't categorized yet.",
+    "expected_trigger": true,
+    "notes": "v1.21.0: SKILL.md's one-line summary of the upgrade pass previously named the wrong checks, so a session that skimmed edit-skill.md ran a different audit and never checked the description.",
+    "assertions": [
+      "references/edit-skill.md is loaded and its table is treated as the authoritative check list, not SKILL.md's summary line",
+      "All eight checks are scored, including description (3), steps-are-instructions (5), and duplication (8b)",
+      "Prune and the functional eval are run after the approval gate, not scored as audit checks",
+      "The run stops at the gate question and waits"
+    ]
+  },
+  {
+    "id": "upgrade-pass-reference-loading-checks-7-8-001",
+    "category": "upgrade-pass",
+    "prompt": "Review my health-tracker skill and fix whatever's wrong with it.",
+    "expected_trigger": true,
+    "notes": "v1.21.0: the load-map sentence stopped at check 6, implying checks 7-8b needed no reference file.",
+    "assertions": [
+      "skill-quality.md is re-opened at check 7 (§5) and check 8a (§6)",
+      "prune.md is re-opened at check 8b (§3)",
+      "No check is graded from the table's one-line summary alone",
+      "interview.md, phases.md, changelog.md, packaging.md, and claude-code-skill.md are not loaded during the audit"
+    ]
+  },
+  {
+    "id": "upgrade-pass-scope-check-on-requested-change-001",
+    "category": "upgrade-pass",
+    "prompt": "My travel-agent skill is great. Just add recurring price-drop monitoring for flights I've saved.",
+    "expected_trigger": true,
+    "notes": "v1.21.0: check 1 audited only the existing skill, so a second job bolted on by the requested change passed silently.",
+    "assertions": [
+      "Check 1 is run against the requested change as well as the existing skill",
+      "The added job is identified as a second job (monitoring vs planning) and a chain split is offered at the gate",
+      "The change is not applied before the user answers"
+    ]
+  },
+  {
+    "id": "upgrade-pass-nesting-verified-by-grep-001",
+    "category": "upgrade-pass",
+    "prompt": "Shrink my personal-finance skill, it's gotten bloated.",
+    "expected_trigger": true,
+    "notes": "v1.21.0: 'references one level deep' was unfalsifiable by eye; three parallel runs split on check 4 because only one of them grepped.",
+    "assertions": [
+      "Check 4 verifies nesting with grep over references/ rather than by inspection",
+      "Reference-to-reference links found are reported with counts as a check 4 finding",
+      "A lean SKILL.md is not failed merely for being under the ~100-200 line band"
+    ]
+  },
+  {
+    "id": "upgrade-pass-personal-names-and-dead-pointers-001",
+    "category": "upgrade-pass",
+    "prompt": "Update my personal-finance skill to use the new brokerage export format.",
+    "expected_trigger": true,
+    "notes": "v1.21.0: the no-personal-names rule was enforced only in the description, and dead file pointers were found only by accident.",
+    "assertions": [
+      "Check 5 flags personal names appearing in the skill body or reference files, not just the description",
+      "Check 8a confirms every file path referenced anywhere in the skill resolves on disk, including paths in CLAUDE.md and MEMORY.md",
+      "Each dead pointer is reported with its exact file and line"
+    ]
+  },
+  {
+    "id": "upgrade-pass-invocation-mode-hard-verdict-001",
+    "category": "upgrade-pass",
+    "prompt": "Review my grill-me skill.",
+    "expected_trigger": true,
+    "notes": "v1.21.0: check 2 produced soft 'weak pass' verdicts; §4 now has a fourth question and demands a hard pass or fail.",
+    "assertions": [
+      "Check 2 returns a hard pass or fail, never a hedged verdict",
+      "A pass names which of the four auto-fire questions it satisfies",
+      "A skill meeting none of the four is failed with 'add disable-model-invocation: true' as the fix"
+    ]
+  },
+  {
+    "id": "cc0-no-frontmatter",
+    "category": "claude-code-path",
+    "prompt": "Build me a new Claude Code skill called invoice-chaser.",
+    "expected_trigger": true,
+    "notes": "RULE CC-0 (v1.22.0) — Claude Code SKILL.md must have NO YAML frontmatter.",
+    "assertions": [
+      "The generated skill/SKILL.md does NOT start with a --- frontmatter block",
+      "The generated SKILL.md has no name: or description: key anywhere",
+      "SKILL.md opens with an '# <Skill Name>' heading followed by the version line",
+      "~/.claude/commands/invoice-chaser.md is written (CC-6), since it is the only entry point",
+      "Claude states that the skill will not auto-trigger and only /invoice-chaser invokes it"
+    ]
+  },
+  {
+    "id": "cc0-packaged-path-still-has-frontmatter",
+    "category": "claude-code-path",
+    "prompt": "Build me a packaged .skill file for Cowork that cleans up Notion exports.",
+    "expected_trigger": true,
+    "notes": "RULE CC-0 must NOT leak into the packaged/Cowork path, which requires frontmatter to install.",
+    "assertions": [
+      "The generated SKILL.md DOES include YAML frontmatter with name and description",
+      "skill-quality.md section 1 is applied to write the description",
+      "RULE CC-0 is not cited as a reason to omit frontmatter on this path"
+    ]
+  },
+  {
+    "id": "cc0-no-retro-strip",
+    "category": "claude-code-path",
+    "prompt": "Review my youtube-summarizer skill and fix anything wrong with it.",
+    "expected_trigger": true,
+    "notes": "RULE CC-0 applies on create and on requested edits — never as an unprompted retro-strip.",
+    "assertions": [
+      "Existing frontmatter in the reviewed skill is NOT removed without asking",
+      "If frontmatter removal is proposed, it is raised as a question, not applied silently"
+    ]
+  }
+]
