@@ -1,7 +1,7 @@
 # Claude Setup Instructions — Claude, set this person up
 
 > **This file is for Claude, not for the person.** If a human is reading it: close it, open the
-> `READ-ME.html` file in the top level of this bundle instead (it opens a Google Doc in the browser), and follow its four steps.
+> `README.md` file in the top level of this bundle instead (it links to a step-by-step Google Doc), and follow that.
 
 **You are Claude, running on the user's computer.** They pointed you at this file because they want their Claude set up with a clean, proven structure: a shared knowledge base, memory files, the right global instructions, and a few starter skills. **Read this whole file, then do the setup for them — end to end — in plain English. Don't stop until every step is done and verified.**
 
