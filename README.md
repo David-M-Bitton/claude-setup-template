@@ -9,6 +9,6 @@ Step-by-step guide: https://docs.google.com/document/d/1Hu_mHU9nm7GpVNBoTNQR-Ub4
 
 Open Claude Code and paste this:
 
-> Download https://github.com/david-m-bitton/claude-setup-template into a folder called "Claude Setup Template" in my Downloads folder. Use git clone if git works on this computer. If it doesn't, download https://github.com/david-m-bitton/claude-setup-template/archive/refs/heads/main.zip, unzip it, and move the files inside so they sit directly in that folder. Then follow the instructions in "Setup Files/claude-instructions.md" inside it.
+> Download https://github.com/David-M-Bitton/claude-setup-template into a folder called "Claude Setup Template" in my Downloads folder. Use git clone if git works on this computer. If it doesn't, download https://github.com/David-M-Bitton/claude-setup-template/archive/refs/heads/main.zip, unzip it, and move the files inside so they sit directly in that folder. Then follow the instructions in "Setup Files/claude-instructions.md" inside it.
 
 Works on Mac and Windows.
