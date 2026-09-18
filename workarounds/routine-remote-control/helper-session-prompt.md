@@ -24,12 +24,12 @@ On each firing, do exactly this and nothing else:
 
 1. Call mcp__scheduled-tasks__list_scheduled_tasks, then mcp__scheduled-tasks__list_task_runs
    for each enabled task, and collect every run whose status is "running".
-2. For each running routine session, read its JSON under
-   ~/Library/Application Support/Claude/claude-code-sessions/ and skip it if bridgeSessionIds
-   is already set.
+2. For each running routine session, find its JSON. 🔴 It is NOT at claude-code-sessions/<id>.json — it is nested two levels down and keeps the local_ prefix, so ALWAYS locate it with:
+   find "$HOME/Library/Application Support/Claude/claude-code-sessions" -maxdepth 4 -name "<session id>.json"
+   Read that file and SKIP the session if bridgeSessionIds is already set.
 3. For the rest, call mcp__ccd_session_mgmt__set_remote_control with that session id and
    enabled true.
-4. Wait about 20 seconds, re-read each JSON, and append one line per newly bridged run to
+4. Wait about 20 seconds, re-read each JSON via the same find, and append one line per newly bridged run to
    ~/claude-remote-control-links.md
    in the form:  YYYY-MM-DD HH:MM  <task-id>  https://claude.ai/code/<bridge id>
 5. Say nothing in chat unless something failed. A quiet morning needs no message.
@@ -53,7 +53,7 @@ THE RULES THAT MATTER:
 
 ## What to expect
 
-`~/claude-remote-control-links.md` fills up overnight with one line per routine run. Each
+`Scheduled/remote-control-links.md` fills up overnight with one line per routine run. Each
 `https://claude.ai/code/...` link opens that run on your phone.
 
 ## The limits, stated plainly
